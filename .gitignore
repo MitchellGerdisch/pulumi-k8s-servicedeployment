@@ -11,6 +11,8 @@ package-lock.json
 **/version.txt
 **/dist
 nuget/
+/pkg
+/pkg/*
 
 ci-scripts/
 *.tar.gz

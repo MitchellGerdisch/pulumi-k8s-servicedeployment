@@ -1,39 +1,52 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/pulumi/pulumi/master/pkg/codegen/schema/pulumi.json
 ---
-name: xyz
+name: k8s-servicedeployment
 resources:
-  xyz:index:StaticPage:
+  k8s-servicedeployment:index:ServiceDeployment:
     isComponent: true
     inputProperties:
-      indexContent:
+      allocateIPAddress:
+        type: boolean
+        plain: true
+        description: Whether or not to allocate an IP address for the service.
+      image:
         type: string
-        description: The HTML content for index.html.
+        description: Name of the image to deploy.
+      isMiniKube:
+        type: boolean
+        description: Whether or not using minikube
+      ports:
+        type: array
+        items:
+          type: number
+        description: Ports for service to listen on.
+      replicas:
+        type: number
+        description: Number of replicas of the service to deploy.
     requiredInputs:
-      - indexContent
+      - image
     properties:
-      bucket:
-        "$ref": "/aws/v4.0.0/schema.json#/resources/aws:s3%2Fbucket:Bucket"
-        description: The bucket resource.
-      websiteUrl:
+      frontEndIp:
         type: string
-        description: The website URL.
+        description: The front end IP
     required:
-      - bucket
-      - websiteUrl
+      - frontEndIp
 language:
   csharp:
     packageReferences:
       Pulumi: 3.*
-      Pulumi.Aws: 4.*
+      Pulumi.Kubernetes: 3.*
+    namespaces:
+      k8s-servicedeployment: K8sServiceDeployment
   go:
     generateResourceContainerTypes: true
-    importBasePath: github.com/pulumi/pulumi-xyz/sdk/go/xyz
+    importBasePath: github.com/MitchellGerdisch/pulumi-k8s-servicedeployment/sdk/go/k8s-servicedeployment
   nodejs:
     dependencies:
-      "@pulumi/aws": "^4.0.0"
+      "@pulumi/kubernetes": "^3.0.0"
     devDependencies:
       typescript: "^3.7.0"
   python:
     requires:
       pulumi: ">=3.0.0,<4.0.0"
-      pulumi-aws: ">=4.0.0,<5.0.0"
+      pulumi-kubernetes: ">=3.0.0,<4.0.0"

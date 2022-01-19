@@ -1,6 +1,57 @@
-# xyz Pulumi Component Provider (Go)
+# K8s Service Deployment Pulumi Component Provider (Go)
 
-This repo is a boilerplate showing how to create a Pulumi component provider written in Go. You can search-replace `xyz` with the name of your desired provider as a starting point for creating a component provider for your component resources.
+This repo contains the component resource and generated SDKs for a Pulumi package that can be used to deploy K8s Deployments and Services onto a cluster.
+
+## How Was This Created?
+This repo was created using the boilerplate here: https://github.com/pulumi/pulumi-component-provider-go-boilerplate
+
+And then it was updated as per this walkthrough: https://www.youtube.com/watch?v=_RXvNS5N8A8 
+
+The component resource that this repo is based on is the ServiceDeployment.go component resource found here: https://github.com/pulumi/examples/blob/master/kubernetes-go-guestbook/components/serviceDeployment.go 
+
+# Steps of Note to Create the Package and SDKs
+As stated above, this package was created by following the tutorial here: https://www.youtube.com/watch?v=_RXvNS5N8A8  
+
+To augment that tutorial, this section identifies any steps that may require additional color commentary or information.
+
+* The README for the boilerplate implies that you just change "xyz" to the name of your package. But there are places where the import is using `github.com/pulumi/pulumi-xyz` where you need to change out that `pulumi` repo name.
+  * At least I'm assuming it's required. But maybe that `pulumi` "repo" name is not really a repo name and so you can use `pulumi` but then you might conflict with official `pulumi` stuff? 
+* The component resource we are using (see link above) declares a `Deployment` and a `DeploymentArgs` structure and a funcion `NewServiceDeployment`. So the references to the actual component resource should reference `Deployment` and not `NewServiceDeployment` even though the main code will call `NewServiceDeployment`. See `schema.yaml` and `provider.go` for places where the component resource is referenced.
+* When using an existing component resource, you will want to change the package line to be a `provider` instead of `main`
+* `schema.yaml` file
+  * **language** section:
+    * *csharp*
+      * map the hyphenated naming to a camel-case name since csharp doesn't like hyphens in namespaces as in:
+      ```
+          namespaces:
+            aws-quickstart-vpc: AwsQuickStartVpc
+      ```
+* `export GOPATH=<SOMEPLACE CLEAN>` 
+  * This is needed for the make commands to work
+  * If you set it to a local folder, make sure .gitignore is set to ignore `pkg` and `pkg/*`
+
+## Build and Test
+
+```bash
+# Build and install the provider (plugin copied to $GOPATH/bin)
+make install_provider
+
+# Regenerate SDKs
+make generate
+
+# Test Node.js SDK
+$ make install_nodejs_sdk
+$ cd examples/simple
+$ yarn install
+$ yarn link @pulumi/xyz
+$ pulumi stack init test
+$ pulumi config set aws:region us-east-1
+$ pulumi up
+```
+
+
+
+----- FROM ORIGINAL BOILERPLATE LIKELY TO BE DELETED ----
 
 An example `StaticPage` [component resource](https://www.pulumi.com/docs/intro/concepts/resources/#components) is available in `provider/pkg/provider/staticPage.go`. This component creates a static web page hosted in an AWS S3 Bucket. There is nothing special about `StaticPage` -- it is a typical component resource written in Go.
 
@@ -21,24 +72,7 @@ Note that the generated provider plugin (`pulumi-resource-xyz`) must be on your 
 - Python 3.6+ (to build the Python SDK)
 - .NET Core SDK (to build the .NET SDK)
 
-## Build and Test
 
-```bash
-# Build and install the provider (plugin copied to $GOPATH/bin)
-make install_provider
-
-# Regenerate SDKs
-make generate
-
-# Test Node.js SDK
-$ make install_nodejs_sdk
-$ cd examples/simple
-$ yarn install
-$ yarn link @pulumi/xyz
-$ pulumi stack init test
-$ pulumi config set aws:region us-east-1
-$ pulumi up
-```
 
 ## Naming
 

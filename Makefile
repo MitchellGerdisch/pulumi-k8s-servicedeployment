@@ -1,7 +1,9 @@
 VERSION         := 0.0.1
 
-PACK            := xyz
-PROJECT         := github.com/pulumi/pulumi-${PACK}
+# Change PACK:=xyz to the name of the package (after "pulumi-")
+PACK            := k8s-servicedeployment
+# Change PROJECT to point at git repo
+PROJECT         := github.com/MitchellGerdisch/pulumi-${PACK}
 
 PROVIDER        := pulumi-resource-${PACK}
 CODEGEN         := pulumi-gen-${PACK}
