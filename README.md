@@ -38,16 +38,18 @@ make install_provider
 
 make generate # Or make gen_dotnet_sdk
 make build # Or make build_dotnet_sdk
+make install # Or make install_dotnet_sdk
 ```
 # Test C#
 To use the generted C# package do the following:
-- In your multilanguage package folder you will see a `dotnet/bin/Debug/Pulumi.K8sServiceDeployment.x.x.x.nupkg`. This file is like a zip of the C# SDK and related info and is used to install the SDK into your project environment as follows ...
+- Assuming you ran the `make install`, in your multilanguage package folder you will see a `nuget` folder. This folder contains the C# SDK file package.
+- To use it, go to your Pulumi project folder and run:
 - In your Pulumi project folder:
   - mkdir nuget
   - cp <MULTILANGUAGE_PACKAGE_FOLDER>/dotnet/binDebug/Pulumi.K8sServiceDeployment.0.0.1.nupkg ./nuget
   - Run
     ```
-    dotnet add package --source "$(pwd)/nuget;https://api.nuget.org/v3/index.json"  Pulumi.K8sServiceDeployment
+    dotnet add package --source "<PACKAGE FOLDER>/nuget;https://api.nuget.org/v3/index.json"  Pulumi.K8sServiceDeployment
     ```
 - In your Pulumi project file add: 
   ```
