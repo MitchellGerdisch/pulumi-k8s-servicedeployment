@@ -36,8 +36,24 @@ To augment that tutorial, this section identifies any steps that may require add
 # Build and install the provider (plugin copied to $GOPATH/bin)
 make install_provider
 
-# Regenerate SDKs
-make generate
+make generate # Or make gen_dotnet_sdk
+make build # Or make build_dotnet_sdk
+```
+# Test C#
+To use the generted C# package do the following:
+- In your multilanguage package folder you will see a `dotnet/bin/Debug/Pulumi.K8sServiceDeployment.x.x.x.nupkg`. This file is like a zip of the C# SDK and related info and is used to install the SDK into your project environment as follows ...
+- In your Pulumi project folder:
+  - mkdir nuget
+  - cp <MULTILANGUAGE_PACKAGE_FOLDER>/dotnet/binDebug/Pulumi.K8sServiceDeployment.0.0.1.nupkg ./nuget
+  - Run
+    ```
+    dotnet add package --source "$(pwd)/nuget;https://api.nuget.org/v3/index.json"  Pulumi.K8sServiceDeployment
+    ```
+- In your Pulumi project file add: 
+  ```
+  using Pulumi.K8sServiceDeployment
+  ```
+
 
 # Test Node.js SDK
 $ make install_nodejs_sdk
