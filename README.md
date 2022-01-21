@@ -36,31 +36,41 @@ To augment that tutorial, this section identifies any steps that may require add
 ```bash
 # Build and install the provider (plugin copied to $GOPATH/bin)
 make install_provider
-# Set PATH to find the provider binary created in previous step
-export PATH=$PATH:$PWD/bin
+# IN THE TERMINAL USED FOR THE PULUMI PROJECT YOU ARE DEPLOYING:
+export PATH=$PATH:<PKG_DIRECTORY>/bin
+# Where <PKG_DIRECTORY> is the directory where you ran make install_provider above.
+# This is how the Pulumi engine finds the binary plugin that is used by the SDKs to run.
 
 make generate # Or make gen_dotnet_sdk
 make build # Or make build_dotnet_sdk
-make install # Or make install_dotnet_sdk
+# You can go straing to install since it'll do gen and build. 
+# Also, you can do make install_dotnet_sdk or make install_nodejs_sdk, etc to do just the specific package 
+make install 
 ```
+
 # Test C#
-To use the generted C# package do the following:
-- Assuming you ran the `make install`, in your multilanguage package folder you will see a `nuget` folder. This folder contains the C# SDK file package.
-- To use it, go to your Pulumi project folder and run:
-- In your Pulumi project folder:
-  - mkdir nuget
-  - cp <MULTILANGUAGE_PACKAGE_FOLDER>/dotnet/binDebug/Pulumi.K8sServiceDeployment.0.0.1.nupkg ./nuget
+To use the generated C# package do the following, note the package directory i.e. where you ran the `make` commands above.
+- You should have run `make install` or `make install_dotnet_sdk` in the package directory as described above.
+- We'l refer to this directory as PKG_DIR in the following steps
+- Open a terminal in the Pulumi project and do the following
+  - export PATH=$PATH:*PKG_DIR/bin*
+    - e.g. `export PATH=$PATH:~/my-package-dir/bin`
+  - export NUGET_DIR=*PKG_DIR/nuget*
+    - e.g. `export NUGET_DIR=~/my-package-dir/nuget`
   - Run
     ```
-    dotnet add package --source "<PACKAGE FOLDER>/nuget;https://api.nuget.org/v3/index.json"  Pulumi.K8sServiceDeployment
+    dotnet add package --source "$NUGET_DIR;https://api.nuget.org/v3/index.json"  Pulumi.K8sServiceDeployment
     ```
 - In your Pulumi project file add: 
   ```
   using Pulumi.K8sServiceDeployment
   ```
+- Run `pulumi up`
 
 
 # Test Node.js SDK
+Not fully vetted, basically do the same steps as the C# list above but switch to yarn, etc instead of dotnet add.  
+```bash
 $ make install_nodejs_sdk
 $ cd examples/simple
 $ yarn install
