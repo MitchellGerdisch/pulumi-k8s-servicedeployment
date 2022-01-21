@@ -18,6 +18,7 @@ To augment that tutorial, this section identifies any steps that may require add
   * At least I'm assuming it's required. But maybe that `pulumi` "repo" name is not really a repo name and so you can use `pulumi` but then you might conflict with official `pulumi` stuff? 
 * The component resource we are using (see link above) declares a `Deployment` and a `DeploymentArgs` structure and a funcion `NewServiceDeployment`. So the references to the actual component resource should reference `Deployment` and not `NewServiceDeployment` even though the main code will call `NewServiceDeployment`. See `schema.yaml` and `provider.go` for places where the component resource is referenced.
 * The input args for the component resource need to have `pulumi:"<lowercaseInputName>"` added after where `<lowercaseInputName>` is the same input name but with a starting lowercase character.
+  * These need to match the values set in the `schema.yaml` file.
 * When using an existing component resource, you will want to change the package line to be a `provider` instead of `main`
 * `schema.yaml` file
   * **language** section:
@@ -36,10 +37,6 @@ To augment that tutorial, this section identifies any steps that may require add
 ```bash
 # Build and install the provider (plugin copied to $GOPATH/bin)
 make install_provider
-# IN THE TERMINAL USED FOR THE PULUMI PROJECT YOU ARE DEPLOYING:
-export PATH=$PATH:<PKG_DIRECTORY>/bin
-# Where <PKG_DIRECTORY> is the directory where you ran make install_provider above.
-# This is how the Pulumi engine finds the binary plugin that is used by the SDKs to run.
 
 make generate # Or make gen_dotnet_sdk
 make build # Or make build_dotnet_sdk
@@ -52,7 +49,7 @@ make install
 To use the generated C# package do the following, note the package directory i.e. where you ran the `make` commands above.
 - You should have run `make install` or `make install_dotnet_sdk` in the package directory as described above.
 - We'l refer to this directory as PKG_DIR in the following steps
-- Open a terminal in the Pulumi project and do the following
+- Open a terminal in the Pulumi project folder and do the following
   - export PATH=$PATH:*PKG_DIR/bin*
     - e.g. `export PATH=$PATH:~/my-package-dir/bin`
   - export NUGET_DIR=*PKG_DIR/nuget*

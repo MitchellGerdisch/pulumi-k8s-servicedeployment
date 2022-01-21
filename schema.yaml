@@ -7,7 +7,6 @@ resources:
     inputProperties:
       allocateIPAddress:
         type: boolean
-        plain: true
         description: Whether or not to allocate an IP address for the service.
       image:
         type: string

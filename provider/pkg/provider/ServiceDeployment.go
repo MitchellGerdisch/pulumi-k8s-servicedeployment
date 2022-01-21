@@ -15,6 +15,7 @@
 package provider
 
 import (
+	"fmt"
 	appsv1 "github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes/apps/v1"
 	corev1 "github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes/core/v1"
 	metav1 "github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes/meta/v1"
@@ -24,13 +25,13 @@ import (
 type ServiceDeployment struct {
 	pulumi.ResourceState
 
-	FrontendIP pulumi.StringPtrOutput
+	FrontendIP pulumi.StringPtrOutput `pulumi:"frontEndIp"`
 	Deployment *appsv1.Deployment
 	Service    *corev1.Service
 }
 
 type ServiceDeploymentArgs struct {
-	AllocateIPAddress pulumi.Bool
+	AllocateIPAddress pulumi.Bool          `pulumi:"allocateIpAddress"`
 	Image             pulumi.StringInput   `pulumi:"image"`
 	IsMinikube        pulumi.Bool          `pulumi:"isMinikube"`
 	Ports             pulumi.IntArrayInput `pulumi:"ports"`
