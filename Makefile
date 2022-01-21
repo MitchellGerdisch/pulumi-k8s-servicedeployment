@@ -1,4 +1,4 @@
-VERSION         := 0.0.2
+VERSION         := 0.0.3
 
 # Change PACK:=xyz to the name of the package (after "pulumi-")
 PACK            := k8s-servicedeployment

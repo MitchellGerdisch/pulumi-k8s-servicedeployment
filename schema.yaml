@@ -5,15 +5,9 @@ resources:
   k8s-servicedeployment:index:ServiceDeployment:
     isComponent: true
     inputProperties:
-      allocateIPAddress:
-        type: boolean
-        description: Whether or not to allocate an IP address for the service.
       image:
         type: string
         description: Name of the image to deploy.
-      isMiniKube:
-        type: boolean
-        description: Whether or not using minikube
       ports:
         type: array
         items:
@@ -22,8 +16,12 @@ resources:
       replicas:
         type: number
         description: Number of replicas of the service to deploy.
+      serviceType:
+        type: string
+        description: Service Type for K8s service. E.g. "LoadBalancer" or "ClusterIP"
     requiredInputs:
       - image
+      - ports
     properties:
       frontEndIp:
         type: string

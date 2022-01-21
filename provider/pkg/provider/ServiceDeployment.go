@@ -15,7 +15,6 @@
 package provider
 
 import (
-	"fmt"
 	appsv1 "github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes/apps/v1"
 	corev1 "github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes/core/v1"
 	metav1 "github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes/meta/v1"
@@ -31,11 +30,10 @@ type ServiceDeployment struct {
 }
 
 type ServiceDeploymentArgs struct {
-	AllocateIPAddress pulumi.Bool          `pulumi:"allocateIpAddress"`
-	Image             pulumi.StringInput   `pulumi:"image"`
-	IsMinikube        pulumi.Bool          `pulumi:"isMinikube"`
-	Ports             pulumi.IntArrayInput `pulumi:"ports"`
-	Replicas          pulumi.IntPtrInput   `pulumi:"replicas"`
+	Image             pulumi.StringInput  	`pulumi:"image"`
+	Ports             pulumi.IntArrayInput	`pulumi:"ports"`
+	Replicas          pulumi.IntPtrInput  	`pulumi:"replicas"`
+	ServiceType    	  pulumi.StringInput 		`pulumi:"serviceType"`
 }
 
 func NewServiceDeployment(
@@ -115,15 +113,6 @@ func NewServiceDeployment(
 		return result
 	}).(corev1.ServicePortArrayOutput)
 
-	var serviceType pulumi.String
-	if args.AllocateIPAddress {
-		if args.IsMinikube {
-			serviceType = "ClusterIP"
-		} else {
-			serviceType = "LoadBalancer"
-		}
-	}
-
 	serviceDeployment.Service, err = corev1.NewService(ctx, name, &corev1.ServiceArgs{
 		Metadata: &metav1.ObjectMetaArgs{
 			Labels: labels,
@@ -132,7 +121,7 @@ func NewServiceDeployment(
 		Spec: &corev1.ServiceSpecArgs{
 			Ports:    servicePorts,
 			Selector: labels,
-			Type:     serviceType,
+			Type:     args.ServiceType,
 		},
 	}, pulumi.Parent(serviceDeployment))
 	if err != nil {

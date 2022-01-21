@@ -33,6 +33,7 @@ To augment that tutorial, this section identifies any steps that may require add
   * If you set it to a local folder, make sure .gitignore is set to ignore `pkg` and `pkg/*`
 
 ## Build and Test
+If the provider `schema.yaml` has changed, update `Makefile` and `version/version.go` with a new version number to ensure the changes are picked up by the calling code.
 
 ```bash
 # Build and install the provider (plugin copied to $GOPATH/bin)

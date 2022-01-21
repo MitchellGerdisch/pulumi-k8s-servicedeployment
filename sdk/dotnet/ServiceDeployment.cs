@@ -47,24 +47,12 @@ namespace Pulumi.K8sServiceDeployment
     public sealed class ServiceDeploymentArgs : Pulumi.ResourceArgs
     {
         /// <summary>
-        /// Whether or not to allocate an IP address for the service.
-        /// </summary>
-        [Input("allocateIPAddress")]
-        public Input<bool>? AllocateIPAddress { get; set; }
-
-        /// <summary>
         /// Name of the image to deploy.
         /// </summary>
         [Input("image", required: true)]
         public Input<string> Image { get; set; } = null!;
 
-        /// <summary>
-        /// Whether or not using minikube
-        /// </summary>
-        [Input("isMiniKube")]
-        public Input<bool>? IsMiniKube { get; set; }
-
-        [Input("ports")]
+        [Input("ports", required: true)]
         private InputList<double>? _ports;
 
         /// <summary>
@@ -81,6 +69,12 @@ namespace Pulumi.K8sServiceDeployment
         /// </summary>
         [Input("replicas")]
         public Input<double>? Replicas { get; set; }
+
+        /// <summary>
+        /// Service Type for K8s service. E.g. "LoadBalancer" or "ClusterIP"
+        /// </summary>
+        [Input("serviceType")]
+        public Input<string>? ServiceType { get; set; }
 
         public ServiceDeploymentArgs()
         {
