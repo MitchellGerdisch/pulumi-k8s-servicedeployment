@@ -31,10 +31,10 @@ type ServiceDeployment struct {
 
 type ServiceDeploymentArgs struct {
 	AllocateIPAddress pulumi.Bool
-	Image             pulumi.StringInput `pulumi:"Image"`
-	IsMinikube        pulumi.Bool `pulumi:"IsMinikube"`
-	Ports             pulumi.IntArrayInput `pulumi:"Ports"`
-	Replicas          pulumi.IntPtrInput `pulumi:"Replicas"`
+	Image             pulumi.StringInput   `pulumi:"image"`
+	IsMinikube        pulumi.Bool          `pulumi:"isMinikube"`
+	Ports             pulumi.IntArrayInput `pulumi:"ports"`
+	Replicas          pulumi.IntPtrInput   `pulumi:"replicas"`
 }
 
 func NewServiceDeployment(

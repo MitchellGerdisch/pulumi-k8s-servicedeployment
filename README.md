@@ -17,6 +17,7 @@ To augment that tutorial, this section identifies any steps that may require add
 * The README for the boilerplate implies that you just change "xyz" to the name of your package. But there are places where the import is using `github.com/pulumi/pulumi-xyz` where you need to change out that `pulumi` repo name.
   * At least I'm assuming it's required. But maybe that `pulumi` "repo" name is not really a repo name and so you can use `pulumi` but then you might conflict with official `pulumi` stuff? 
 * The component resource we are using (see link above) declares a `Deployment` and a `DeploymentArgs` structure and a funcion `NewServiceDeployment`. So the references to the actual component resource should reference `Deployment` and not `NewServiceDeployment` even though the main code will call `NewServiceDeployment`. See `schema.yaml` and `provider.go` for places where the component resource is referenced.
+* The input args for the component resource need to have `pulumi:"<lowercaseInputName>"` added after where `<lowercaseInputName>` is the same input name but with a starting lowercase character.
 * When using an existing component resource, you will want to change the package line to be a `provider` instead of `main`
 * `schema.yaml` file
   * **language** section:
@@ -35,6 +36,8 @@ To augment that tutorial, this section identifies any steps that may require add
 ```bash
 # Build and install the provider (plugin copied to $GOPATH/bin)
 make install_provider
+# Set PATH to find the provider binary created in previous step
+export PATH=$PATH:$PWD/bin
 
 make generate # Or make gen_dotnet_sdk
 make build # Or make build_dotnet_sdk
